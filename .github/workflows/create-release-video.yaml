@@ -37,7 +37,8 @@ jobs:
       - run: echo $WORKFLOW_INPUT > input-props.json
         env:
           WORKFLOW_INPUT: ${{ needs.deploy.outputs.openai }}
-      - run: npm run render -- --props="./input-props.json"
+      # - run: npm run render -- --props="./input-props.json"
+      - run: npm run render
       - uses: actions/upload-artifact@v2
         with:
           name: out.mp4
