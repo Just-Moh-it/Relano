@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "preview": "BROWSER=0 remotion preview remotion/index.tsx",
-    "render": "remotion render remotion/index.tsx"
+    "render": "remotion render remotion/index.tsx base-comp"
   },
   "dependencies": {
     "@remotion/google-fonts": "^3.3.87",

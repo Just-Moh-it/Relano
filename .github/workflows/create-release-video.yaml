@@ -22,20 +22,22 @@ jobs:
           # openai-prompt: "Write a summary of the following release: \n${{ github.event.release.release.body }}"
           openai-prompt: "Say hello world in hindi: "
         id: openai
-  render:
-    name: Render video
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@main
-      - uses: actions/setup-node@main
-      - run: sudo apt update
-      - run: sudo apt install ffmpeg
-      - run: npm i
-      - run: echo $WORKFLOW_INPUT > input-props.json
-        env:
-          WORKFLOW_INPUT: ${{ toJson(steps.openai.outputs.text) }}
-      - run: npm run render -- --props="./input-props.json"
-      - uses: actions/upload-artifact@v2
-        with:
-          name: out.mp4
-          path: out/video.mp4
+      - name: "Echo output"
+        run: echo ${{ steps.openai.outputs.text }}
+  # render:
+  #   name: Render video
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@main
+  #     - uses: actions/setup-node@main
+  #     - run: sudo apt update
+  #     - run: sudo apt install ffmpeg
+  #     - run: npm i
+  #     - run: echo $WORKFLOW_INPUT > input-props.json
+  #       env:
+  #         WORKFLOW_INPUT: ${{ toJson(steps.openai.outputs.text) }}
+  #     - run: npm run render -- --props="./input-props.json"
+  #     - uses: actions/upload-artifact@v2
+  #       with:
+  #         name: out.mp4
+  #         path: out/video.mp4
