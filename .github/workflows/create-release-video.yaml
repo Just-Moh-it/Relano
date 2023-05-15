@@ -1,0 +1,39 @@
+name: OpenAI Action
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    name: OpenAI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: OpenAI
+        uses: riccardolinares/openai-commit@v0.0.1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          openai-prompt: "Write a summary of the following release: \n${{ github.event.release.release.body }}"
+        id: openai
+  render:
+    name: Render video
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/setup-node@main
+      - run: sudo apt update
+      - run: sudo apt install ffmpeg
+      - run: npm i
+      - run: echo $WORKFLOW_INPUT > input-props.json
+        env:
+          WORKFLOW_INPUT: ${{ toJson(steps.openai.outputs.text) }}
+      - run: npm run render -- --props="./input-props.json"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: out.mp4
+          path: out/video.mp4
