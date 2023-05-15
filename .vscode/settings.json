@@ -1,4 +1,6 @@
 {
   "typescript.tsdk": "node_modules/.pnpm/typescript@5.0.4/node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.experimental.tsserver.web.enableProjectWideIntellisense": true,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true
 }

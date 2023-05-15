@@ -1,5 +1,5 @@
 import { AbsoluteFill, Composition, Video, staticFile } from "remotion";
-import BaseComp, { baseCompSchema } from "./BaseComp";
+import BaseComp from "./BaseComp";
 
 export default function Comp() {
   return (
@@ -7,7 +7,6 @@ export default function Comp() {
       <Composition
         component={BaseComp}
         durationInFrames={30 * 40}
-        schema={baseCompSchema}
         fps={30}
         width={2160}
         height={1080}
@@ -17,7 +16,6 @@ export default function Comp() {
       <Composition
         component={() => <Video src={staticFile("/insp.mp4")} />}
         durationInFrames={570}
-        schema={baseCompSchema}
         fps={30}
         width={2160}
         height={1080}
@@ -37,7 +35,6 @@ export default function Comp() {
           </>
         )}
         durationInFrames={200}
-        schema={baseCompSchema}
         fps={30}
         width={2160}
         height={1080}
