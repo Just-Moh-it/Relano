@@ -21,8 +21,7 @@ jobs:
         uses: riccardolinares/openai-commit@v0.0.1
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          # openai-prompt: "Write a summary of the following release: \n${{ github.event.release.release.body }}"
-          openai-prompt: "Say hello world in hindi: "
+          openai-prompt: "Write a summary of the following release: \n${{ github.event.release.release.body }}"
         id: openai
   render:
     name: Render video
@@ -37,8 +36,8 @@ jobs:
       - run: echo $WORKFLOW_INPUT > input-props.json
         env:
           WORKFLOW_INPUT: ${{ needs.deploy.outputs.openai }}
-      # - run: npm run render -- --props="./input-props.json"
-      - run: npm run render
+      # - run: npm run render -- --props="./input-props.json" --out out/video.mp4
+      - run: npm run render --out out/video.mp4
       - uses: actions/upload-artifact@v2
         with:
           name: out.mp4
