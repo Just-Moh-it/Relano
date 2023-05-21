@@ -5,11 +5,11 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import GridPatternSvg from "./GridPatternSvg";
+import GridPatternSvg from "../assets/GridPatternSvg";
 import { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/utils/cn";
 
-export default function BubbleFromBottom({
+export default function SlideInContentFromBottomWithGridSequence({
   children,
   ...props
 }: HTMLAttributes<HTMLDivElement> & { children?: ReactNode }) {

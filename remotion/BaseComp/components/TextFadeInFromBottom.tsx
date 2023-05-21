@@ -8,7 +8,7 @@ import {
 import { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/utils/cn";
 
-export default function AppearFromBottom({
+export default function TextFadeInFromBottom({
   children,
   noExit,
   ...props
@@ -17,7 +17,7 @@ export default function AppearFromBottom({
   noExit?: boolean;
 }) {
   const frame = useCurrentFrame();
-  const { fps, durationInFrames } = useVideoConfig();
+  const { fps } = useVideoConfig();
   const numberEnterSpringBottom = spring({
     frame: frame + 10,
     fps,

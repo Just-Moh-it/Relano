@@ -1,5 +1,5 @@
 import { AbsoluteFill } from "remotion";
-import GridPatternSvg from "./GridPatternSvg";
+import GridPatternSvg from "../assets/GridPatternSvg";
 import { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/utils/cn";
 
