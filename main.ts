@@ -41,11 +41,15 @@ const run = async () => {
   //   ],
   // });
 
-  console.log("Creating a Webpack bundle of the video");
-  const bundleLocation = await bundle(path.resolve(entry), () => undefined, {
-    // If you have a Webpack override, make sure to add it here
-    webpackOverride,
-  });
+  console.log("Starting script...");
+
+  // console.log("Creating a Webpack bundle of the video");
+  // const bundleLocation = await bundle(path.resolve(entry), () => undefined, {
+  //   // If you have a Webpack override, make sure to add it here
+  //   webpackOverride,
+  // });
+  const bundleLocation = "https://lucky-melomakarona-6c5b57.netlify.app";
+
   // // Replace backtick with single quote
   // const content = (completion.data.choices[0].message?.content ?? "").replace(
   //   /`/g,
@@ -78,6 +82,8 @@ allChanges:
   };
 
   console.log("Message content", content);
+
+  // console.log("Bundle created at", bundleLocation);
 
   // Extract all the compositions you have defined in your project
   // from the webpack bundle.
