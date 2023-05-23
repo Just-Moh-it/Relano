@@ -1,12 +1,6 @@
-import {
-  AbsoluteFill,
-  interpolate,
-  spring,
-  useCurrentFrame,
-  useVideoConfig,
-} from "remotion";
+import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { HTMLAttributes, ReactNode } from "react";
-import { cn } from "@/utils/cn";
+import { cn } from "../../../utils/cn";
 
 export default function TextFadeInFromBottom({
   children,

@@ -1,15 +1,8 @@
 import { HTMLAttributes } from "react";
-import {
-  AbsoluteFill,
-  Audio,
-  Series,
-  interpolate,
-  useCurrentFrame,
-  useVideoConfig,
-} from "remotion";
-import * as z from "zod";
+import { AbsoluteFill, Series, useVideoConfig } from "remotion";
+import { z } from "zod";
 import First from "./sequences/SlideInContentFromBottomWithGrid";
-import * as interFont from "@remotion/google-fonts/Inter";
+import { loadFont as loadInterFont } from "@remotion/google-fonts/Inter";
 import SlidingDoors from "./components/SlidingDoors";
 import TextFadeInFromBottom from "./components/TextFadeInFromBottom";
 import GridPattern from "./components/GridPattern";
@@ -38,7 +31,7 @@ export const baseCompSchema = z.object({
 });
 export type BaseCompProps = z.infer<typeof baseCompSchema>;
 
-interFont.loadFont("normal", {
+loadInterFont("normal", {
   weights: ["400", "500", "600", "700", "800", "900"],
 });
 

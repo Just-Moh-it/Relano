@@ -4,6 +4,7 @@ import path from "path";
 export const webpackOverride: WebpackOverrideFn = (currentConfiguration) => {
   return {
     ...currentConfiguration,
+
     resolve: {
       ...currentConfiguration.resolve,
       alias: {

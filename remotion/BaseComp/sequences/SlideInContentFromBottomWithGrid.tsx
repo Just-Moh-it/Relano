@@ -7,7 +7,7 @@ import {
 } from "remotion";
 import GridPatternSvg from "../assets/GridPatternSvg";
 import { HTMLAttributes, ReactNode } from "react";
-import { cn } from "@/utils/cn";
+import { cn } from "../../../utils/cn";
 
 export default function SlideInContentFromBottomWithGridSequence({
   children,

@@ -2,10 +2,18 @@ name: "Relano - Automated 'What's new' Videos"
 description: "Create automated "
 author: "Just-Moh-it"
 inputs:
-  milliseconds: # change this
+  openai-api-key: # change this
     required: true
-    description: "input description here"
-    default: "default value if applicable"
+    description: "API key for OpenAI"
+  releaseNotes:
+    required: true
+    description: "Release notes for the new version"
+  repositorySlug:
+    required: true
+    description: "Repository slug (eg: remotion-dev/remotion)"
+  releaseTag:
+    required: true
+    description: "Release tag (eg: v3.4.4)"
 runs:
   using: "node16"
   main: "dist/index.js"

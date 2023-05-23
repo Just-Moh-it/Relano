@@ -1,14 +1,10 @@
 import {
-  AbsoluteFill,
   Composition,
-  Video,
   getInputProps,
-  staticFile,
   delayRender,
   continueRender,
-  cancelRender,
 } from "remotion";
-import BaseComp, { BaseCompProps, ParsedPropsSchema } from "./BaseComp";
+import BaseComp, { ParsedPropsSchema, BaseCompProps } from "./BaseComp";
 import { useMemo, useState } from "react";
 import { parse } from "yaml";
 
@@ -16,11 +12,24 @@ const inputProps = getInputProps() as BaseCompProps;
 
 export default function Comp() {
   const [handle] = useState(() => delayRender());
+  const [durationInFrames, setDurationInFrames] = useState(30 * 3);
   const { topChanges, allChanges } = useMemo((): ParsedPropsSchema => {
     const parsed = parse(
       inputProps.openaiGeneration ?? openaiGeneration
     ) as unknown as ParsedPropsSchema;
 
+    const duration = 81 * parsed.topChanges.length + 555;
+
+    setDurationInFrames(duration);
+
+    continueRender(handle);
+
+    console.log("Props", {
+      repositorySlug: "Vercel/NextJS",
+      releaseTag: "13.4.2",
+      parsed,
+      openaiGeneration,
+    });
     return parsed;
   }, [handle, inputProps.openaiGeneration]);
 
@@ -28,11 +37,20 @@ export default function Comp() {
     <>
       <Composition
         component={BaseComp}
-        durationInFrames={30 * 40}
+        // component={() => <Video src={staticFile("/insp.mp4")} />}
+        // component={() => (
+        //   <AbsoluteFill className="flex-col gap-20 justify-center items-center text-white bg-black text-9xl w-full h-full">
+        //     {" "}
+        //     Hello World{" "}
+        //     <Video width={200} height={200} src={staticFile("/insp.mp4")} />
+        //   </AbsoluteFill>
+        // )}
+        // durationInFrames={30 * 4}
+        durationInFrames={durationInFrames}
         fps={30}
         width={2160}
         height={1080}
-        id="base-comp"
+        id="basecomp"
         defaultProps={{
           repositorySlug: "Vercel/NextJS",
           releaseTag: "13.4.2",
@@ -133,8 +151,8 @@ export default function Comp() {
         height={1080}
         id="insp"
         defaultProps={{}}
-      />
-      <Composition
+      /> */}
+      {/* <Composition
         component={() => (
           <>
             <Video

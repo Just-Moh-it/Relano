@@ -22,7 +22,7 @@ export default function ScrollingTextList({ list }: { list: string[] }) {
       },
     }),
     [0, 1],
-    [0, -100],
+    [0, -85],
     {
       easing: Easing.bezier(0.5, 0.01, 0, 1),
     }
