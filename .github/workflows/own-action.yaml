@@ -1,7 +1,7 @@
 name: "Relano - Automated Whats new videos"
 on:
   release:
-    types: [published]
+    types: [published, edited]
 
 jobs:
   run-whats-new:
