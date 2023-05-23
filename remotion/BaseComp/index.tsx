@@ -15,18 +15,28 @@ import TextFadeInFromBottom from "./components/TextFadeInFromBottom";
 import GridPattern from "./components/GridPattern";
 import AllThingsWeAddedSequence from "./sequences/AllOtherStuff";
 import FadeOutExit from "./components/FadeOutExit";
-import Star6Sided from "./assets/star6Sided";
+import Star6Sided from "./assets/Star6Sided";
 import Star4Sided from "./assets/Star4Sided";
 import clsx from "clsx";
 import ConditionalWrap from "./components/ConditionalWrap";
 import SlideExitToTop from "./components/SlideExitToTop";
+import FadingOutAudio from "./sequences/FadingOutAudio";
+
+const parsedPropsSchemaBase = {
+  topChanges: z.array(z.object({ title: z.string(), description: z.string() })),
+  allChanges: z.array(z.string()),
+};
+const parsedPropsSchema = z.object(parsedPropsSchemaBase);
+export type ParsedPropsSchema = z.infer<typeof parsedPropsSchema>;
 
 export const baseCompSchema = z.object({
   repositorySlug: z.string(),
   releaseTag: z.string(),
-  topChanges: z.array(z.object({ title: z.string(), description: z.string() })),
-  allChanges: z.array(z.string()),
+  openaiGeneration: z.string(),
+
+  ...parsedPropsSchemaBase,
 });
+export type BaseCompProps = z.infer<typeof baseCompSchema>;
 
 interFont.loadFont("normal", {
   weights: ["400", "500", "600", "700", "800", "900"],
@@ -47,27 +57,14 @@ const BaseComp = ({
   topChanges,
   allChanges,
 }: z.infer<typeof baseCompSchema> & HTMLAttributes<HTMLDivElement>) => {
-  const frame = useCurrentFrame();
-  const { fps, durationInFrames } = useVideoConfig();
+  const { fps } = useVideoConfig();
 
   return (
     <AbsoluteFill className="bg-black">
-      <Audio
-        src="https://audiocdn.epidemicsound.com/ES_ITUNES/Zy0ALC_Ganja/ES_Ganja.mp3"
-        startFrom={20 * fps}
-        volume={
-          // Slowly fade out
-          frame > durationInFrames - fps * 5
-            ? 1 -
-              interpolate(
-                frame,
-                [durationInFrames - fps * 5, durationInFrames],
-                [0, 1]
-              ) **
-                1.5
-            : 1
-        }
-      />
+      {/* Audio */}
+      <FadingOutAudio />
+
+      {/* Video */}
       <Series>
         <Series.Sequence
           durationInFrames={fps * 1.5}
