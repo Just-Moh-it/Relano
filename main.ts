@@ -1,19 +1,15 @@
-// import { getInput, debug } from "@actions/core";
-import { bundle } from "@remotion/bundler";
 import { getCompositions, renderMedia } from "@remotion/renderer";
-import path from "path";
-import { webpackOverride } from "./remotion-webpack-override";
 import { Configuration, OpenAIApi } from "openai";
-import { getInput } from "@actions/core";
+import { debug, getInput } from "@actions/core";
 
 const run = async () => {
   const compositionId = "basecomp";
   const entry = "./remotion/index.ts";
 
-  // const openaiConfig = new Configuration({
-  //   apiKey: getInput("openai-api-key"), // TODO: Remove me!!!
-  // });
-  // const openai = new OpenAIApi(openaiConfig);
+  const openaiConfig = new Configuration({
+    apiKey: getInput("openai-api-key"),
+  });
+  const openai = new OpenAIApi(openaiConfig);
 
   const releaseNotes =
     getInput("releaseNotes") ||
@@ -21,25 +17,25 @@ const run = async () => {
   const repositorySlug = getInput("repositorySlug") || "remotion-dev/remotion";
   const releaseTag = getInput("releaseTag") || "v3.3.95";
 
-  // const completion = await openai.createChatCompletion({
-  //   stop: "```",
-  //   model: "gpt-3.5-turbo",
-  //   frequency_penalty: 0,
-  //   temperature: 1,
-  //   top_p: 1,
-  //   max_tokens: 1800,
-  //   messages: [
-  //     {
-  //       role: "system",
-  //       content:
-  //         "You are a github release notes video creator ai, which has been prompted to convert the following release-notes to digestable information in the form of a video. You don't actually do the video creation part, but just create input props in the form of yaml for the video to be created from. \n\nWhen passed in release notes:\n- Create at most 5 top changes, each with the following properties:\n    - Title: A title describing the change (e.g. 'New Design Theme'). Use at most 7 words\n    - Description: A short description about the change (e.g. 'Updated the button styles, touched up some colors, and made the ui look a lot nicer'). Please try keeping it shorter than 25 words.\n- A long list of all the changes\n\nRemember:\n- !!!Only output nothing except valid yaml. No backticks, no syntax breaking.\n- Only include text in the yaml strings. No markdown or links. The video should be self-sufficient and shouldn't ask the user to refer anywhere else.\n- End your response with ``` (triple backticks)\n\nThe yaml should follow the following zod schema when converted to json:\n\n```ts\nconst videoPropsSchema = z.object({\n    topChanges: z.array(z.object({title: string, description: string})).minLength(1),\n    allChanges: z.array(string()).minLength(1).maxLength(25)\n})\n```\n",
-  //     },
-  //     {
-  //       role: "user",
-  //       content: `These are the release notes for the latest release for 'https://github.com/Vercel/nextjs':\n\n\`\`\`md\n${releaseNotes}\n\`\`\`\n\nBased on the instructions and the release notes passed in, the videoProps yaml is:\n\n\`\`\`yaml`,
-  //     },
-  //   ],
-  // });
+  const completion = await openai.createChatCompletion({
+    stop: "```",
+    model: "gpt-3.5-turbo",
+    frequency_penalty: 0,
+    temperature: 1,
+    top_p: 1,
+    max_tokens: 1800,
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a github release notes video creator ai, which has been prompted to convert the following release-notes to digestable information in the form of a video. You don't actually do the video creation part, but just create input props in the form of yaml for the video to be created from. \n\nWhen passed in release notes:\n- Create at most 5 top changes, each with the following properties:\n    - Title: A title describing the change (e.g. 'New Design Theme'). Use at most 7 words\n    - Description: A short description about the change (e.g. 'Updated the button styles, touched up some colors, and made the ui look a lot nicer'). Please try keeping it shorter than 25 words.\n- A long list of all the changes\n\nRemember:\n- !!!Only output nothing except valid yaml. No backticks, no syntax breaking.\n- Only include text in the yaml strings. No markdown or links. The video should be self-sufficient and shouldn't ask the user to refer anywhere else.\n- End your response with ``` (triple backticks)\n\nThe yaml should follow the following zod schema when converted to json:\n\n```ts\nconst videoPropsSchema = z.object({\n    topChanges: z.array(z.object({title: string, description: string})).minLength(1),\n    allChanges: z.array(string()).minLength(1).maxLength(25)\n})\n```\n",
+      },
+      {
+        role: "user",
+        content: `These are the release notes for the latest release for 'https://github.com/Vercel/nextjs':\n\n\`\`\`md\n${releaseNotes}\n\`\`\`\n\nBased on the instructions and the release notes passed in, the videoProps yaml is:\n\n\`\`\`yaml`,
+      },
+    ],
+  });
 
   console.log("Starting script...");
 
@@ -51,27 +47,28 @@ const run = async () => {
   const bundleLocation = "https://lucky-melomakarona-6c5b57.netlify.app";
 
   // // Replace backtick with single quote
-  // const content = (completion.data.choices[0].message?.content ?? "").replace(
-  //   /`/g,
-  //   "'"
-  // );
-  const content = `topChanges:
-  - title: Easier Tailwind installation
-    description: By @rjackson
-  - title: Fixed Skia on PNPM
-    description: By @JonnyBurger
-  - title: Fixed extraneous brackets in preloadAsset()
-    description: By @thecmdrunner
-  - title: Updated legacy link
-    description: By @thecmdrunner
-  - title: Generated Fig autocomplete from Remotion code
-    description: By @JonnyBurger
-allChanges:
-  - Easier Tailwind installation with \`@remotion/tailwind\`! by @rjackson
-  - Fix Skia on PNPM and elimi...
-  - Fix extraneous brackets in \`preloadAsset()\` by @thecmdrunner
-  - Update legacy link by @thecmdrunner
-  - Generate Fig autocomplete from Remotion code by @JonnyBurger`;
+  const content = (completion.data.choices[0].message?.content ?? "").replace(
+    /`/g,
+    "'"
+  );
+  debug("Got content from OpenAI: " + content);
+  //   const content = `topChanges:
+  //   - title: Easier Tailwind installation
+  //     description: By @rjackson
+  //   - title: Fixed Skia on PNPM
+  //     description: By @JonnyBurger
+  //   - title: Fixed extraneous brackets in preloadAsset()
+  //     description: By @thecmdrunner
+  //   - title: Updated legacy link
+  //     description: By @thecmdrunner
+  //   - title: Generated Fig autocomplete from Remotion code
+  //     description: By @JonnyBurger
+  // allChanges:
+  //   - Easier Tailwind installation with \`@remotion/tailwind\`! by @rjackson
+  //   - Fix Skia on PNPM and elimi...
+  //   - Fix extraneous brackets in \`preloadAsset()\` by @thecmdrunner
+  //   - Update legacy link by @thecmdrunner
+  //   - Generate Fig autocomplete from Remotion code by @JonnyBurger`;
 
   // Parametrize the video by passing arbitrary props to your component.
   const inputProps = {
