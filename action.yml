@@ -1,6 +1,9 @@
 name: "Relano - Automated 'What's new' Videos"
 description: "Create automated "
 author: "Just-Moh-it"
+branding:
+  icon: zap
+  color: green
 inputs:
   openai-api-key: # change this
     required: true
