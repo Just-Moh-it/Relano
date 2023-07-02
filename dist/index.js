@@ -86058,35 +86058,6 @@ module.exports = JSON.parse('{"name":"openai","version":"3.2.1","description":"N
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nccwpck_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__nccwpck_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__nccwpck_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -86116,27 +86087,128 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
+// ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
-/* harmony import */ var _remotion_renderer__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(6225);
-/* harmony import */ var _remotion_renderer__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_remotion_renderer__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var openai__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(586);
-/* harmony import */ var openai__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(openai__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(7733);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_1__);
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/@remotion+renderer@3.3.94_react-dom@18.2.0_react@18.2.0/node_modules/@remotion/renderer/dist/index.js
+var dist = __nccwpck_require__(6225);
+// EXTERNAL MODULE: ./node_modules/.pnpm/openai@3.2.1/node_modules/openai/dist/index.js
+var openai_dist = __nccwpck_require__(586);
+// EXTERNAL MODULE: ./node_modules/.pnpm/@actions+core@1.10.0/node_modules/@actions/core/lib/core.js
+var core = __nccwpck_require__(7733);
+;// CONCATENATED MODULE: ./constants.ts
+const systemPrompt = "You are a github release notes video creator ai, which has been prompted to convert the following release-notes to digestable information in the form of a video. You don't actually do the video creation part, but just create input props in the form of yaml for the video to be created from. \n\nWhen passed in release notes:\n- Create at most 5 top changes, each with the following properties:\n    - Title: A title describing the change (e.g. 'New Design Theme'). Use at most 7 words\n    - Description: A short description about the change (e.g. 'Updated the button styles, touched up some colors, and made the ui look a lot nicer'). Please try keeping it shorter than 25 words.\n- A long list of all the changes\n\nRemember:\n- !!!Only output nothing except valid yaml. No backticks, no syntax breaking.\n- Only include text in the yaml strings. No markdown or links. The video should be self-sufficient and shouldn't ask the user to refer anywhere else.\n- End your response with ``` (triple backticks). \n- Produce the yaml string values in the language the release notes are in, and enter the language code (ISO 639-1) in the `langCode` field.\n\nThe yaml should follow the following zod schema when converted to json:\n\n```ts\nconst videoPropsSchema = z.object({\n    langCode: z.string().default('en'),\n   topChanges: z.array(z.object({title: string, description: string})).minLength(1),\n    allChanges: z.array(string()).minLength(1).maxLength(25)\n})\n```\n";
+const translations = {
+    HERE_ARE_THE_TOP_CHANGES: {
+        zh: "这里是最主要的更改",
+        es: "Aquí están los cambios más importantes",
+        en: "Here are the top changes",
+        hi: "यहाँ शीर्ष परिवर्तन हैं",
+        ar: "هنا أبرز التغييرات",
+        pt: "Aqui estão as principais alterações",
+        bn: "এখানে শীর্ষ পরিবর্তনগুলি রয়েছে",
+        ru: "Вот главные изменения",
+        ja: "ここにはトップの変更点があります",
+        pa: "ਇੱਥੇ ਸਿਖਰ ਤੇ ਬਦਲਾਅ ਹਨ",
+        de: "Hier sind die wichtigsten Änderungen",
+        jv: "Ing kene ana owah-owahan paling dhuwur",
+        te: "ఇక్కడ ఉన్నాయి టాప్ మార్పులు",
+        vi: "Đây là những thay đổi hàng đầu",
+        ko: "여기에는 주요 변경 사항이 있습니다",
+        mr: "येथे मुख्य बदल आहेत",
+        tr: "İşte en önemli değişiklikler",
+        ta: "இங்கே மேல் மாற்றங்கள் உள்ளன",
+        ur: "یہاں ہیں سب سے اوپر تبدیلیاں",
+        gu: "અહીં ટોચની ફેરફારો છે",
+        fa: "در اینجا تغییرات برتر هستند",
+    },
+    CHECK_OUT_THE_LATEST_RELEASE: {
+        zh: "查看最新版本",
+        es: "Consulta la última versión",
+        en: "Check out the latest release",
+        hi: "नवीनतम रिलीज़ की जांच करें",
+        ar: "تحقق من الإصدار الأخير",
+        pt: "Confira o último lançamento",
+        bn: "সর্বশেষ রিলিজটি দেখুন",
+        ru: "Проверьте последний релиз",
+        ja: "最新のリリースをチェックしてください",
+        pa: "ਨਵੀਨਤਮ ਰਿਲੀਜ਼ ਦੀ ਜਾਂਚ ਕਰੋ",
+        de: "Sehen Sie sich die neueste Version an",
+        jv: "Mriksa rilis paling anyar",
+        te: "తాజా విడుదలను తనిఖీ చేయండి",
+        vi: "Kiểm tra bản phát hành mới nhất",
+        ko: "최신 릴리즈 확인",
+        mr: "नवीनतम सूत्रीकरण तपासा",
+        tr: "En son sürümü kontrol edin",
+        ta: "சமீபத்திய வெளியீட்டை சரிபார்க்கவும்",
+        ur: "تازہ ترین ریلیز کی جانچ پڑتال کریں",
+        gu: "નવીનતમ રીલીઝ તપાસો",
+        fa: "آخرین انتشار را بررسی کنید",
+    },
+    ON_GITHUB: {
+        zh: "在GitHub上",
+        es: "En GitHub",
+        en: "On GitHub",
+        hi: "GitHub पर",
+        ar: "على GitHub",
+        pt: "No GitHub",
+        bn: "GitHub এ",
+        ru: "На GitHub",
+        ja: "GitHubで",
+        pa: "ਗਿੱਟਹਬ ਤੇ",
+        de: "Auf GitHub",
+        jv: "Ing GitHub",
+        te: "గిట్‌హబ్‌లో",
+        vi: "Trên GitHub",
+        ko: "GitHub에서",
+        mr: "GitHub वर",
+        tr: "GitHub'da",
+        ta: "GitHub இல்",
+        ur: "گٹ ہب پر",
+        gu: "GitHub પર",
+        fa: "در GitHub",
+    },
+    HERES_ALL_THE_STUFF_ADDED: {
+        zh: "这是所有添加的内容！",
+        es: "¡Aquí está todo lo que se añadió!",
+        en: "Here's all the stuff added!",
+        hi: "यह सभी जोड़े गए सामग्री हैं!",
+        ar: "ها هي كل الأشياء التي تمت إضافتها!",
+        pt: "Aqui está tudo o que foi adicionado!",
+        bn: "এখানে সব যোগ করা জিনিস রয়েছে!",
+        ru: "Вот все добавленное!",
+        ja: "これが追加されたすべてのものです！",
+        pa: "ਇਹ ਸਾਰੀਆਂ ਸ਼ੀਜ਼ਾਂ ਹਨ ਜੋ ਸ਼ਾਮਲ ਕੀਤੀਆਂ ਗਈਆਂ ਹਨ!",
+        de: "Hier ist alles, was hinzugefügt wurde!",
+        jv: "Ing kene kabeh barang sing ditambahake!",
+        te: "ఇది అన్నిటినీ జతచేయబడింది!",
+        vi: "Đây là tất cả những thứ đã được thêm vào!",
+        ko: "추가된 모든 것이 여기 있습니다!",
+        mr: "येथे सर्व जोडलेली गोष्टी आहेत!",
+        tr: "İşte eklenen tüm şeyler!",
+        ta: "இதோ அனைத்து சேர்க்கப்பட்ட பொருட்களும் உள்ளன!",
+        ur: "یہ ہے سب کچھ شامل کیا گیا!",
+        gu: "અહીં બધું ઉમેરાયેલું છે!",
+        fa: "این همه چیز اضافه شده است!",
+    },
+};
+
+;// CONCATENATED MODULE: ./main.ts
+
 
 
 
 const run = async () => {
     const compositionId = "basecomp";
     const entry = "./remotion/index.ts";
-    const openaiConfig = new openai__WEBPACK_IMPORTED_MODULE_0__.Configuration({
-        apiKey: (0,_actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput)("openai-api-key"),
+    const openaiConfig = new openai_dist.Configuration({
+        apiKey: (0,core.getInput)("openai-api-key"),
     });
-    const openai = new openai__WEBPACK_IMPORTED_MODULE_0__.OpenAIApi(openaiConfig);
-    const releaseNotes = (0,_actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput)("releaseNotes") ||
+    const openai = new openai_dist.OpenAIApi(openaiConfig);
+    const releaseNotes = (0,core.getInput)("releaseNotes") ||
         "What's Changed\n--------------\n\n-   Easier Tailwind installation with `@remotion/tailwind`! by [@rjackson](https://github.com/rjackson) in [#2310](https://github.com/remotion-dev/remotion/pull/2310)\n-   Fix Skia on PNPM and eliminate peer dependency warning by [@JonnyBurger](https://github.com/JonnyBurger) in [#2303](https://github.com/remotion-dev/remotion/pull/2303)\n-   Fix extraneous brackets in `preloadAsset()` by [@thecmdrunner](https://github.com/thecmdrunner) in [#2297](https://github.com/remotion-dev/remotion/pull/2297)\n\nDocs\n----\n\n-   Update legacy link by [@thecmdrunner](https://github.com/thecmdrunner) in [#2301](https://github.com/remotion-dev/remotion/pull/2301)\n\nInternals\n---------\n\n-   Generate Fig autocomplete from Remotion code by [@JonnyBurger](https://github.com/JonnyBurger) in [#2292](https://github.com/remotion-dev/remotion/pull/2292)\n\nFull Changelog: [`v3.3.94...v3.3.95`](https://github.com/remotion-dev/remotion/compare/v3.3.94...v3.3.95)";
-    const repositorySlug = (0,_actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput)("repositorySlug") || "remotion-dev/remotion";
-    const releaseTag = (0,_actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput)("releaseTag") || "v3.3.95";
+    const repositorySlug = (0,core.getInput)("repositorySlug") || "remotion-dev/remotion";
+    const releaseTag = (0,core.getInput)("releaseTag") || "v3.3.95";
     const completion = await openai.createChatCompletion({
         stop: "```",
         model: "gpt-3.5-turbo",
@@ -86147,7 +86219,7 @@ const run = async () => {
         messages: [
             {
                 role: "system",
-                content: "You are a github release notes video creator ai, which has been prompted to convert the following release-notes to digestable information in the form of a video. You don't actually do the video creation part, but just create input props in the form of yaml for the video to be created from. \n\nWhen passed in release notes:\n- Create at most 5 top changes, each with the following properties:\n    - Title: A title describing the change (e.g. 'New Design Theme'). Use at most 7 words\n    - Description: A short description about the change (e.g. 'Updated the button styles, touched up some colors, and made the ui look a lot nicer'). Please try keeping it shorter than 25 words.\n- A long list of all the changes\n\nRemember:\n- !!!Only output nothing except valid yaml. No backticks, no syntax breaking.\n- Only include text in the yaml strings. No markdown or links. The video should be self-sufficient and shouldn't ask the user to refer anywhere else.\n- End your response with ``` (triple backticks)\n\nThe yaml should follow the following zod schema when converted to json:\n\n```ts\nconst videoPropsSchema = z.object({\n    topChanges: z.array(z.object({title: string, description: string})).minLength(1),\n    allChanges: z.array(string()).minLength(1).maxLength(25)\n})\n```\n",
+                content: systemPrompt,
             },
             {
                 role: "user",
@@ -86164,7 +86236,7 @@ const run = async () => {
     const bundleLocation = "https://lucky-melomakarona-6c5b57.netlify.app";
     // // Replace backtick with single quote
     const content = (completion.data.choices[0].message?.content ?? "").replace(/`/g, "'");
-    (0,_actions_core__WEBPACK_IMPORTED_MODULE_1__.debug)("Got content from OpenAI: " + content);
+    (0,core.debug)("Got content from OpenAI: " + content);
     //   const content = `topChanges:
     //   - title: Easier Tailwind installation
     //     description: By @rjackson
@@ -86193,7 +86265,7 @@ const run = async () => {
     // console.log("Bundle created at", bundleLocation);
     // Extract all the compositions you have defined in your project
     // from the webpack bundle.
-    const comps = await (0,_remotion_renderer__WEBPACK_IMPORTED_MODULE_2__.getCompositions)(bundleLocation, {
+    const comps = await (0,dist.getCompositions)(bundleLocation, {
         // You can pass custom input props that you can retrieve using getInputProps()
         // in the composition list. Use this if you want to dynamically set the duration or
         // dimensions of the video.
@@ -86208,7 +86280,7 @@ const run = async () => {
     }
     const outputLocation = `out/${compositionId}.mp4`;
     console.log("Attempting to render:", outputLocation);
-    await (0,_remotion_renderer__WEBPACK_IMPORTED_MODULE_2__.renderMedia)({
+    await (0,dist.renderMedia)({
         composition,
         serveUrl: bundleLocation,
         codec: "h264",
