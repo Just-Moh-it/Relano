@@ -32,7 +32,7 @@ const run = async () => {
       },
       {
         role: "user",
-        content: `These are the release notes for the latest release for 'https://github.com/Vercel/nextjs':\n\n\`\`\`md\n${releaseNotes}\n\`\`\`\n\nBased on the instructions and the release notes passed in, the videoProps yaml is:\n\n\`\`\`yaml`,
+        content: `These are the release notes for the latest release for '${repositorySlug}':\n\n\`\`\`md\n${releaseNotes}\n\`\`\`\n\nBased on the instructions and the release notes passed in, the videoProps yaml is:\n\n\`\`\`yaml`,
       },
     ],
   });
