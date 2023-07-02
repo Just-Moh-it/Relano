@@ -1,8 +1,15 @@
 import { AbsoluteFill, Sequence, useVideoConfig } from "remotion";
 import WordLevelOpacityReveal from "../components/WordLevelOpacityReveal";
 import ScrollingTextList from "../components/ScrollingTextList";
+import { translations } from "@/constants";
 
-export default function AllThingsWeAddedSequence({ list }: { list: string[] }) {
+export default function AllThingsWeAddedSequence({
+  list,
+  langCode,
+}: {
+  list: string[];
+  langCode: string;
+}) {
   const { fps } = useVideoConfig();
 
   return (
@@ -10,7 +17,9 @@ export default function AllThingsWeAddedSequence({ list }: { list: string[] }) {
       <div className="flex-1">
         {/* <Sequence from={fps * -0.5}> */}
         <WordLevelOpacityReveal>
-          {"Here's all the stuff added!"}
+          {translations.HERES_ALL_THE_STUFF_ADDED[
+            langCode as keyof typeof translations.HERES_ALL_THE_STUFF_ADDED
+          ] ?? translations.HERES_ALL_THE_STUFF_ADDED["en"]}
         </WordLevelOpacityReveal>
         {/* </Sequence> */}
       </div>

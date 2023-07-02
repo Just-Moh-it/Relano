@@ -1,6 +1,7 @@
 import { getCompositions, renderMedia } from "@remotion/renderer";
 import { Configuration, OpenAIApi } from "openai";
 import { debug, getInput } from "@actions/core";
+import { systemPrompt } from "./constants";
 
 const run = async () => {
   const compositionId = "basecomp";
@@ -27,8 +28,7 @@ const run = async () => {
     messages: [
       {
         role: "system",
-        content:
-          "You are a github release notes video creator ai, which has been prompted to convert the following release-notes to digestable information in the form of a video. You don't actually do the video creation part, but just create input props in the form of yaml for the video to be created from. \n\nWhen passed in release notes:\n- Create at most 5 top changes, each with the following properties:\n    - Title: A title describing the change (e.g. 'New Design Theme'). Use at most 7 words\n    - Description: A short description about the change (e.g. 'Updated the button styles, touched up some colors, and made the ui look a lot nicer'). Please try keeping it shorter than 25 words.\n- A long list of all the changes\n\nRemember:\n- !!!Only output nothing except valid yaml. No backticks, no syntax breaking.\n- Only include text in the yaml strings. No markdown or links. The video should be self-sufficient and shouldn't ask the user to refer anywhere else.\n- End your response with ``` (triple backticks)\n\nThe yaml should follow the following zod schema when converted to json:\n\n```ts\nconst videoPropsSchema = z.object({\n    topChanges: z.array(z.object({title: string, description: string})).minLength(1),\n    allChanges: z.array(string()).minLength(1).maxLength(25)\n})\n```\n",
+        content: systemPrompt,
       },
       {
         role: "user",
@@ -44,7 +44,7 @@ const run = async () => {
   //   // If you have a Webpack override, make sure to add it here
   //   webpackOverride,
   // });
-  const bundleLocation = "https://lucky-melomakarona-6c5b57.netlify.app";
+  const bundleLocation = "https://rainbow-conkies-f46e58.netlify.app";
 
   // // Replace backtick with single quote
   const content = (completion.data.choices[0].message?.content ?? "").replace(

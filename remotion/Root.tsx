@@ -13,25 +13,26 @@ const inputProps = getInputProps() as BaseCompProps;
 export default function Comp() {
   const [handle] = useState(() => delayRender());
   const [durationInFrames, setDurationInFrames] = useState(30 * 3);
-  const { topChanges, allChanges } = useMemo((): ParsedPropsSchema => {
-    const parsed = parse(
-      inputProps.openaiGeneration ?? openaiGeneration
-    ) as unknown as ParsedPropsSchema;
+  const { topChanges, allChanges, langCode } =
+    useMemo((): ParsedPropsSchema => {
+      const parsed = parse(
+        inputProps.openaiGeneration ?? openaiGeneration
+      ) as unknown as ParsedPropsSchema;
 
-    const duration = 81 * parsed.topChanges.length + 555;
+      const duration = 81 * parsed.topChanges.length + 555;
 
-    setDurationInFrames(duration);
+      setDurationInFrames(duration);
 
-    continueRender(handle);
+      continueRender(handle);
 
-    console.log("Props", {
-      repositorySlug: "Vercel/NextJS",
-      releaseTag: "13.4.2",
-      parsed,
-      openaiGeneration,
-    });
-    return parsed;
-  }, [handle, inputProps.openaiGeneration]);
+      console.log("Props", {
+        repositorySlug: "Vercel/NextJS",
+        releaseTag: "13.4.2",
+        parsed,
+        openaiGeneration,
+      });
+      return parsed;
+    }, [handle, inputProps.openaiGeneration]);
 
   return (
     <>
@@ -57,6 +58,7 @@ export default function Comp() {
           topChanges,
           allChanges,
           openaiGeneration,
+          langCode,
           // topChanges: [
           //   {
           //     title: "Some awesome feature",

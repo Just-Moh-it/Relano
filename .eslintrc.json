@@ -2,8 +2,8 @@
   "parser": "@typescript-eslint/parser",
   "extends": [
     // "next/core-web-vitals",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:github/recommended"
+    // "plugin:@typescript-eslint/recommended",
+    // "plugin:github/recommended"
   ],
   "plugins": ["jest", "@typescript-eslint"],
   "parserOptions": {

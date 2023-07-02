@@ -14,8 +14,10 @@ import clsx from "clsx";
 import ConditionalWrap from "./components/ConditionalWrap";
 import SlideExitToTop from "./components/SlideExitToTop";
 import FadingOutAudio from "./sequences/FadingOutAudio";
+import { translations } from "@/constants";
 
 const parsedPropsSchemaBase = {
+  langCode: z.string().default("en"),
   topChanges: z.array(z.object({ title: z.string(), description: z.string() })),
   allChanges: z.array(z.string()),
 };
@@ -49,6 +51,7 @@ const BaseComp = ({
   releaseTag,
   topChanges,
   allChanges,
+  langCode,
 }: z.infer<typeof baseCompSchema> & HTMLAttributes<HTMLDivElement>) => {
   const { fps } = useVideoConfig();
 
@@ -111,7 +114,9 @@ const BaseComp = ({
               <Star6Sided />
               <Star4Sided />
               <h1 className="text-9xl font-black">
-                {"Here are the top changes!"}
+                {translations.HERE_ARE_THE_TOP_CHANGES[
+                  langCode as keyof typeof translations.HERE_ARE_THE_TOP_CHANGES
+                ] ?? translations.HERE_ARE_THE_TOP_CHANGES["en"]}
               </h1>
             </First>
           </SlidingDoors>
@@ -179,7 +184,7 @@ const BaseComp = ({
           className="z-0"
           name={"Scrolling all things changed list"}
         >
-          <AllThingsWeAddedSequence list={allChanges} />
+          <AllThingsWeAddedSequence langCode={langCode} list={allChanges} />
         </Series.Sequence>
 
         <Series.Sequence
@@ -196,9 +201,15 @@ const BaseComp = ({
             <SlidingDoors>
               <First className="bg-blue-500 text-white flex flex-col items-center justify-center text-center">
                 <h1 className="text-9xl font-black">
-                  Checkout the latest release
+                  {translations.CHECK_OUT_THE_LATEST_RELEASE[
+                    langCode as keyof typeof translations.CHECK_OUT_THE_LATEST_RELEASE
+                  ] ?? translations.CHECK_OUT_THE_LATEST_RELEASE["en"]}
                 </h1>
-                <p className="text-5xl mt-10 text-white/70">On GitHub</p>
+                <p className="text-5xl mt-10 text-white/70">
+                  {translations.ON_GITHUB[
+                    langCode as keyof typeof translations.ON_GITHUB
+                  ] ?? translations.ON_GITHUB["en"]}
+                </p>
               </First>
             </SlidingDoors>
           </Series.Sequence>
