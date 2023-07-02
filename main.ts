@@ -17,6 +17,7 @@ const run = async () => {
     "What's Changed\n--------------\n\n-   Easier Tailwind installation with `@remotion/tailwind`! by [@rjackson](https://github.com/rjackson) in [#2310](https://github.com/remotion-dev/remotion/pull/2310)\n-   Fix Skia on PNPM and eliminate peer dependency warning by [@JonnyBurger](https://github.com/JonnyBurger) in [#2303](https://github.com/remotion-dev/remotion/pull/2303)\n-   Fix extraneous brackets in `preloadAsset()` by [@thecmdrunner](https://github.com/thecmdrunner) in [#2297](https://github.com/remotion-dev/remotion/pull/2297)\n\nDocs\n----\n\n-   Update legacy link by [@thecmdrunner](https://github.com/thecmdrunner) in [#2301](https://github.com/remotion-dev/remotion/pull/2301)\n\nInternals\n---------\n\n-   Generate Fig autocomplete from Remotion code by [@JonnyBurger](https://github.com/JonnyBurger) in [#2292](https://github.com/remotion-dev/remotion/pull/2292)\n\nFull Changelog: [`v3.3.94...v3.3.95`](https://github.com/remotion-dev/remotion/compare/v3.3.94...v3.3.95)";
   const repositorySlug = getInput("repositorySlug") || "remotion-dev/remotion";
   const releaseTag = getInput("releaseTag") || "v3.3.95";
+  const userMessageContent = `These are the release notes for the latest release for '${repositorySlug}':\n\n\`\`\`md\n${releaseNotes}\n\`\`\`\n\nBased on the instructions and the release notes passed in, the videoProps yaml is:\n\n\`\`\`yaml`;
 
   const completion = await openai.createChatCompletion({
     stop: "```",
@@ -32,7 +33,7 @@ const run = async () => {
       },
       {
         role: "user",
-        content: `These are the release notes for the latest release for '${repositorySlug}':\n\n\`\`\`md\n${releaseNotes}\n\`\`\`\n\nBased on the instructions and the release notes passed in, the videoProps yaml is:\n\n\`\`\`yaml`,
+        content: userMessageContent,
       },
     ],
   });
@@ -51,7 +52,9 @@ const run = async () => {
     /`/g,
     "'"
   );
-  debug("Got content from OpenAI: " + content);
+  debug("Here is the user message content\n" + userMessageContent);
+  debug("Here is the system prompt\n" + systemPrompt);
+  debug("Got content from OpenAI: \n" + content);
   //   const content = `topChanges:
   //   - title: Easier Tailwind installation
   //     description: By @rjackson
