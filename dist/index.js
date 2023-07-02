@@ -86233,7 +86233,7 @@ const run = async () => {
     //   // If you have a Webpack override, make sure to add it here
     //   webpackOverride,
     // });
-    const bundleLocation = "https://lucky-melomakarona-6c5b57.netlify.app";
+    const bundleLocation = "https://rainbow-conkies-f46e58.netlify.app";
     // // Replace backtick with single quote
     const content = (completion.data.choices[0].message?.content ?? "").replace(/`/g, "'");
     (0,core.debug)("Got content from OpenAI: " + content);
