@@ -25,5 +25,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: out.mp4
-          path: out/basecomp.mp4
+          name: ${{ github.repository }}-${{ github.event.release.tag_name }}.mp4
+          path: out/${{ github.repository }}-${{ github.event.release.tag_name }}.mp4
